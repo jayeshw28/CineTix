@@ -6,7 +6,7 @@ const ignoredRoutes = [""];
 export default clerkMiddleware((auth, req, evt) => {
   const isPublicRoute = createRouteMatcher(publicRoutes)(req);
   const isIgnoredRoute = createRouteMatcher(ignoredRoutes)(req);
-  
+
   if (isPublicRoute || isIgnoredRoute) {
     return;
   }
