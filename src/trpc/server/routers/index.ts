@@ -1,10 +1,9 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "..";
 import { z } from "zod";
+import { movieRouter } from "./movies";
 
 export const appRouter = createTRPCRouter({
-  hello: protectedProcedure("admin").query(({ ctx }) => {
-    return { name: "jayesh Wankhede", age: 21 };
-  }),
+  movies: movieRouter,
 });
 
 export type AppRouter = typeof appRouter;
