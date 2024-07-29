@@ -1,8 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "..";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "..";
 import { z } from "zod";
 
 export const appRouter = createTRPCRouter({
-  hello: publicProcedure.query(({ ctx }) => {
+  hello: protectedProcedure("admin").query(({ ctx }) => {
     return { name: "jayesh Wankhede", age: 21 };
   }),
 });
