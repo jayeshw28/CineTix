@@ -1,15 +1,15 @@
-"use client";
+import { UserInfo } from "@/components/UserInfo";
 import { trpcClient } from "@/trpc/clients/client";
+import { trpcServer } from "@/trpc/clients/server";
 import { UserButton } from "@clerk/nextjs";
 
-export default function Home() {
-  const { data, isLoading } = trpcClient.hello.useQuery();
+export default async function Home() {
+  const data = await trpcServer.hello.query();
   return (
     <main className="">
       Hello
       <UserButton />
-      <div>{data?.title}</div>
-      <div>{data?.content}</div>
+      <UserInfo hello={data} />
     </main>
   );
 }

@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const appRouter = createTRPCRouter({
   hello: publicProcedure.query(({ ctx }) => {
-    return { title: "News", content: "Lorem Ipsum" };
+    return { name: "jayesh Wankhede", age: 21 };
   }),
 });
 
