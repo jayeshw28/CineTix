@@ -1,9 +1,9 @@
 import { BaseComponent } from "@/utils/types";
-import { Sheet, SheetTrigger } from "../atoms/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "../atoms/sheet";
 import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 
-export function Simplesidebar({ children }: BaseComponent) {
+export function SimpleSidebar({ children }: BaseComponent) {
   return (
     <div className="sm:hidden">
       <Sheet>
@@ -12,6 +12,7 @@ export function Simplesidebar({ children }: BaseComponent) {
             <Menu className="w-5 h-5" />
           </Button>
         </SheetTrigger>
+        <SheetContent side="left">{children}</SheetContent>
       </Sheet>
     </div>
   );
