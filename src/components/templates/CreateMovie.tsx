@@ -9,6 +9,10 @@ import { trpcClient } from "@/trpc/clients/client";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { revalidatePath } from "@/utils/actions/revalidatePath";
+import { useImageUpload } from "@/utils/hooks";
+import { ImagePreview } from "../molecules/ImagePreview";
+import { Controller } from "react-hook-form";
+import { ProgressBar } from "../molecules/ProgressBar";
 
 export interface CreateMovieProps {}
 
@@ -18,22 +22,31 @@ export const CreateMovie = ({}: CreateMovieProps) => {
     handleSubmit,
     reset,
     formState: { errors },
+    control,
+    resetField,
+    watch,
   } = useFormCreateMovie();
+  const {
+    data,
+    isLoading,
+    mutateAsync: createMovie,
+  } = trpcClient.movies.createMovie.useMutation();
 
+  const [{ percent, uploading }, uploadImages] = useImageUpload();
   console.log(errors);
+  const { posterUrl } = watch();
   const { toast } = useToast();
   const router = useRouter();
 
-  const { data, isLoading, mutateAsync } =
-    trpcClient.movies.createMovie.useMutation();
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
         console.log(data);
-        const movie = await mutateAsync(data);
+        const images = await uploadImages(data.posterUrl);
+        const movie = await createMovie({ ...data, posterUrl: images[0] });
         if (movie) {
           reset();
-          toast({ title: `Movie ${data.title} created successfully!` });
+          toast({ title: "Movie created successfully" });
           revalidatePath("/admin/movies");
           router.replace("/admin/movies");
         }
@@ -80,29 +93,27 @@ export const CreateMovie = ({}: CreateMovieProps) => {
           </Label>
         </div>
 
-        {/* <Label title="Images" error={errors.posterUrl?.message?.toString()}>
-            <ImagePreview
-              src={posterUrl || ''}
-              clearImage={() => resetField('posterUrl')}
-            >
-              <Controller
-                control={control}
-                name={`posterUrl`}
-                render={({ field }) => (
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple={false}
-                    onChange={(e) => field.onChange(e?.target?.files)}
-                  />
-                )}
+        <ImagePreview
+          src={posterUrl}
+          clearImage={() => resetField("posterUrl")}
+        >
+          <Controller
+            control={control}
+            name={`posterUrl`}
+            render={({ field }) => (
+              <Input
+                type="file"
+                accept="image/*"
+                multiple={false}
+                onChange={(e) => field.onChange(e?.target?.files)}
               />
-            </ImagePreview>
+            )}
+          />
+        </ImagePreview>
 
-            {percent > 0 ? <ProgressBar value={percent} /> : null}
-          </Label> */}
+        <ProgressBar value={percent} />
       </div>
-      <Button loading={isLoading} type="submit">
+      <Button loading={isLoading || uploading} type="submit">
         Submit
       </Button>
     </form>
