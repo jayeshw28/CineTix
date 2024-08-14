@@ -1,12 +1,12 @@
-'use client'
-import { TrashIcon } from 'lucide-react'
-import { ReactNode, useState, useEffect } from 'react'
-import { Button } from '../atoms/button'
+"use client";
+import { TrashIcon } from "lucide-react";
+import { ReactNode, useState, useEffect } from "react";
+import { Button } from "../atoms/button";
 
 export interface IImageUploadProps {
-  src?: Blob | MediaSource
-  clearImage: () => void
-  children: ReactNode
+  src?: Blob | MediaSource;
+  clearImage: () => void;
+  children: ReactNode;
 }
 
 export const ImagePreview = ({
@@ -14,21 +14,21 @@ export const ImagePreview = ({
   clearImage,
   children,
 }: IImageUploadProps) => {
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     // Check if `src` is a FileList and has at least one file
     if (src instanceof FileList && src.length > 0) {
-      const file = src[0] // Get the first file from the FileList
-      const objectUrl = URL.createObjectURL(file)
-      setImageUrl(objectUrl)
+      const file = src[0]; // Get the first file from the FileList
+      const objectUrl = URL.createObjectURL(file);
+      setImageUrl(objectUrl);
 
       // Cleanup
       return () => {
-        URL.revokeObjectURL(objectUrl)
-      }
+        URL.revokeObjectURL(objectUrl);
+      };
     }
-  }, [src])
+  }, [src]);
 
   if (src) {
     return (
@@ -45,11 +45,11 @@ export const ImagePreview = ({
           <TrashIcon /> Clear
         </Button>
       </div>
-    )
+    );
   }
   return (
     <div className="flex items-center justify-center w-full h-full  min-h-[12rem] bg-gray-100 shadow-inner">
       {children}
     </div>
-  )
-}
+  );
+};

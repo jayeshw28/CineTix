@@ -14,7 +14,7 @@ const firebaseConfig = {
   storageBucket: "cinetix-1df00.appspot.com",
   messagingSenderId: "708824069124",
   appId: "1:708824069124:web:ef2cb22da17850a5d7b151",
-  measurementId: "G-D962YFT8D0"
+  measurementId: "G-D962YFT8D0",
 };
 
 // Initialize Firebase

@@ -26,34 +26,31 @@ export const CreateMovie = ({}: CreateMovieProps) => {
     resetField,
     watch,
   } = useFormCreateMovie();
-  const { 
-    data, 
-    isLoading, 
-    mutateAsync: createMovie, 
+  const {
+    data,
+    isLoading,
+    mutateAsync: createMovie,
+  } = trpcClient.movies.createMovie.useMutation();
 
-  } =
-    trpcClient.movies.createMovie.useMutation();
-  
-  const[{percent, uploading}, uploadImages] = useImageUpload();
+  const [{ percent, uploading }, uploadImages] = useImageUpload();
   console.log(errors);
-  const {posterUrl} = watch();
+  const { posterUrl } = watch();
   const { toast } = useToast();
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
         console.log(data);
         const images = await uploadImages(data.posterUrl);
-        const movie = await createMovie({...data, posterUrl: images[0]}) 
-        if(movie){
-          reset()
-          toast({title: "Movie created successfully" })
-          revalidatePath('/admin/movies')
-          router.replace('/admin/movies')
+        const movie = await createMovie({ ...data, posterUrl: images[0] });
+        if (movie) {
+          reset();
+          toast({ title: "Movie created successfully" });
+          revalidatePath("/admin/movies");
+          router.replace("/admin/movies");
         }
-      })
-      }
+      })}
     >
       <div className="grid grid-cols-2 gap-2">
         <div>
@@ -96,25 +93,25 @@ export const CreateMovie = ({}: CreateMovieProps) => {
           </Label>
         </div>
 
-            <ImagePreview
-              src={posterUrl}
-              clearImage={() => resetField("posterUrl")}
-            >
-              <Controller
-                control={control}
-                name={`posterUrl`}
-                render={({ field }) => (
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple={false}
-                    onChange={(e) => field.onChange(e?.target?.files)}
-                  />
-                )}
+        <ImagePreview
+          src={posterUrl}
+          clearImage={() => resetField("posterUrl")}
+        >
+          <Controller
+            control={control}
+            name={`posterUrl`}
+            render={({ field }) => (
+              <Input
+                type="file"
+                accept="image/*"
+                multiple={false}
+                onChange={(e) => field.onChange(e?.target?.files)}
               />
-            </ImagePreview>
+            )}
+          />
+        </ImagePreview>
 
-            <ProgressBar value={percent} />
+        <ProgressBar value={percent} />
       </div>
       <Button loading={isLoading || uploading} type="submit">
         Submit
