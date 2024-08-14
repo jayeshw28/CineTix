@@ -9,6 +9,10 @@ import { trpcClient } from "@/trpc/clients/client";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { revalidatePath } from "@/utils/actions/revalidatePath";
+import { useImageUpload } from "@/utils/hooks";
+import { ImagePreview } from "../molecules/ImagePreview";
+import { Controller } from "react-hook-form";
+import { ProgressBar } from "../molecules/ProgressBar";
 
 export interface CreateMovieProps {}
 
@@ -18,26 +22,38 @@ export const CreateMovie = ({}: CreateMovieProps) => {
     handleSubmit,
     reset,
     formState: { errors },
+    control,
+    resetField,
+    watch,
   } = useFormCreateMovie();
+  const { 
+    data, 
+    isLoading, 
+    mutateAsync: createMovie, 
 
-  console.log(errors);
-  const { toast } = useToast();
-  const router = useRouter();
-
-  const { data, isLoading, mutateAsync } =
+  } =
     trpcClient.movies.createMovie.useMutation();
+  
+  const[{percent, uploading}, uploadImages] = useImageUpload();
+  console.log(errors);
+  const {posterUrl} = watch();
+  const { toast } = useToast();
+  const router = useRouter()
+
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
         console.log(data);
-        const movie = await mutateAsync(data);
-        if (movie) {
-          reset();
-          toast({ title: `Movie ${data.title} created successfully!` });
-          revalidatePath("/admin/movies");
-          router.replace("/admin/movies");
+        const images = await uploadImages(data.posterUrl);
+        const movie = await createMovie({...data, posterUrl: images[0]}) 
+        if(movie){
+          reset()
+          toast({title: "Movie created successfully" })
+          revalidatePath('/admin/movies')
+          router.replace('/admin/movies')
         }
-      })}
+      })
+      }
     >
       <div className="grid grid-cols-2 gap-2">
         <div>
@@ -80,10 +96,9 @@ export const CreateMovie = ({}: CreateMovieProps) => {
           </Label>
         </div>
 
-        {/* <Label title="Images" error={errors.posterUrl?.message?.toString()}>
             <ImagePreview
-              src={posterUrl || ''}
-              clearImage={() => resetField('posterUrl')}
+              src={posterUrl}
+              clearImage={() => resetField("posterUrl")}
             >
               <Controller
                 control={control}
@@ -99,10 +114,9 @@ export const CreateMovie = ({}: CreateMovieProps) => {
               />
             </ImagePreview>
 
-            {percent > 0 ? <ProgressBar value={percent} /> : null}
-          </Label> */}
+            <ProgressBar value={percent} />
       </div>
-      <Button loading={isLoading} type="submit">
+      <Button loading={isLoading || uploading} type="submit">
         Submit
       </Button>
     </form>
