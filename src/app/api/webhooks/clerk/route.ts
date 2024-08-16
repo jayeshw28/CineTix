@@ -1,8 +1,8 @@
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { prisma } from "@/db/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const payload: WebhookEvent = await request.json();
 
   if (payload.type === "user.created") {

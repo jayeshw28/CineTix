@@ -19,8 +19,10 @@ export const CinemaInfo = ({
         {cinema.Screen.map((screen) => (
           <div key={screen.id}>
             <div className="font-light text-xl ">Screen {screen.number}</div>
-            <AlertBox>
-              {screen.ShowTime.length === 0 ? <div>No shows found.</div> : null}
+            <AlertBox className="bg-gray-300 rounded-sm">
+              {screen.ShowTime.length === 0 ? (
+                <div className="text-gray-600 text-sm">No shows found.</div>
+              ) : null}
             </AlertBox>
             <div className="grid grid-cols-3 gap-2 ">
               {screen.ShowTime.map((showtime) => (
