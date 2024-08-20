@@ -22,24 +22,19 @@ export default async function Page() {
 
       <main className="flex flex-col gap-3">
         <StatCard href={"admin/admins"} title={"Admin"}>
-          {" "}
-          {dashboard.adminCount}{" "}
+          {dashboard.adminCount}
         </StatCard>
         <StatCard href={"admin/managers"} title={"managers"}>
-          {" "}
-          {dashboard.managerCount}{" "}
+          {dashboard.managerCount}
         </StatCard>
         <StatCard href={"admin/users"} title={"Users"}>
-          {" "}
-          {dashboard.userCount}{" "}
+          {dashboard.userCount}
         </StatCard>
         <StatCard href={"admin/cinemas"} title={"Cinemas"}>
-          {" "}
-          {dashboard.cinemaCount}{" "}
+          {dashboard.cinemaCount}
         </StatCard>
         <StatCard href={"admin/movies"} title={"Movies"}>
-          {" "}
-          {dashboard.movieCount}{" "}
+          {dashboard.movieCount}
         </StatCard>
       </main>
     </div>
