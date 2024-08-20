@@ -16,17 +16,18 @@ export const managerRoutes = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.manager.create({ data: { id: input.id } });
     }),
-    dashboard: protectedProcedure("admin", 'manager').query(async ({ ctx }) => {
-      const uid = ctx.userId
-      const [cinema, showtime] =
-        await Promise.all([
-          ctx.db.cinema.count({ where: { Manager: { some: { id: uid } } } }),
-          ctx.db.showTime.count({ where: { Screen: { Cinema: { Manager: { some: { id: uid } } } } } }),
-        ]);
-  
-      return {
-        cinemaCount: cinema,
-        showtimeCount: showtime,
-      };
-    }),
+  dashboard: protectedProcedure("admin", "manager").query(async ({ ctx }) => {
+    const uid = ctx.userId;
+    const [cinema, showtime] = await Promise.all([
+      ctx.db.cinema.count({ where: { Manager: { some: { id: uid } } } }),
+      ctx.db.showTime.count({
+        where: { Screen: { Cinema: { Manager: { some: { id: uid } } } } },
+      }),
+    ]);
+
+    return {
+      cinemaCount: cinema,
+      showtimeCount: showtime,
+    };
+  }),
 });
