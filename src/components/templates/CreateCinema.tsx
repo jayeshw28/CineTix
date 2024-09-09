@@ -13,6 +13,7 @@ import { SimpleAccordion } from "../molecules/simpleAccordion";
 import { HtmlSelect } from "../atoms/select";
 import { ProjectionType, SoundSystemType } from "@prisma/client";
 import { Grid, Square } from "../organisms/ScreenUtils";
+import { watch } from "fs/promises";
 
 export const CreateCinema = () => {
   const {
@@ -20,11 +21,15 @@ export const CreateCinema = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
+    watch,
   } = useFormContext<FormTypeCreateCinema>();
   const { mutateAsync: createCinema, isLoading } =
     trpcClient.cinemas.createCinema.useMutation();
 
-  console.log(errors);
+  const formData = watch();
+  console.log("errors", errors);
+  console.log("formData", formData);
 
   const { toast } = useToast();
   const router = useRouter();
