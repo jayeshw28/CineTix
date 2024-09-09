@@ -19,6 +19,18 @@ export const cinemaRouter = createTRPCRouter({
       },
     });
   }),
+  myScreens: protectedProcedure().query(({ ctx }) => {
+    return ctx.db.screen.findMany({
+      where: {
+        Cinema: {
+          Manager: { some: { id: ctx.userId } },
+        },
+      },
+      include: {
+        Cinema: true,
+      },
+    });
+  }),
   createCinema: protectedProcedure("admin")
     .input(schemaCreateCinema)
     .mutation(({ ctx, input }) => {
@@ -45,6 +57,7 @@ export const cinemaRouter = createTRPCRouter({
       return ctx.db.cinema.create({
         data: {
           name: cinemaName,
+          Address: { create: address },
           managerId: managerId,
           Manager: {
             connectOrCreate: {
