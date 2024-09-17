@@ -63,8 +63,10 @@ model Address {
   cinemaId  Int      @unique
   Cinema    Cinema   @relation(fields: [cinemaId], references: [id])
   address   String
-  lat       Float
-  lng       Float
+  city      City     @default(Delhi)
+  state     States   @default(Delhi)
+  lat       Float    @default(28.7041)
+  lng       Float    @default(77.1025)
 }
 
 model Screen {
@@ -152,6 +154,84 @@ model Ticket {
   qrCode String?
 
   Booking Booking[]
+}
+
+enum States {
+  Andhra_Pradesh
+  Arunachal_Pradesh
+  Assam
+  Bihar
+  Chandigarh
+  Chhattisgarh
+  Dadra_and_Nagar_Haveli_and_Daman_and_Diu
+  Delhi
+  Goa
+  Gujarat
+  Haryana
+  Himachal_Pradesh
+  Jammu_and_Kashmir
+  Jharkhand
+  Karnataka
+  Kerala
+  Ladakh
+  Lakshadweep
+  Madhya_Pradesh
+  Maharashtra
+  Manipur
+  Meghalaya
+  Mizoram
+  Nagaland
+  Odisha
+  Puducherry
+  Punjab
+  Rajasthan
+  Sikkim
+  Tamil_Nadu
+  Telangana
+  Tripura
+  Uttar_Pradesh
+  Uttarakhand
+  West_Bengal
+}
+
+enum City {
+  Agra
+  Ahmedabad
+  Allahabad
+  Amritsar
+  Bangalore
+  Bhopal
+  Bhubaneswar
+  Chandigarh
+  Chennai
+  Coimbatore
+  Delhi
+  Faridabad
+  Ghaziabad
+  Goa
+  Gurgaon
+  Guwahati
+  Hyderabad
+  Indore
+  Jaipur
+  Kanpur
+  Kochi
+  Kolkata
+  Lucknow
+  Ludhiana
+  Madurai
+  Mangalore
+  Mumbai
+  Nagpur
+  Noida
+  Patna
+  Pune
+  Ranchi
+  Surat
+  Thiruvananthapuram
+  Vadodara
+  Varanasi
+  Visakhapatnam
 }
 
 enum ProjectionType {
