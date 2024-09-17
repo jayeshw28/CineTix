@@ -1,5 +1,8 @@
 import { schemaCreateCinema } from "@/forms/createCinema";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "..";
+import { findManyCinemaArgsSchema } from "./input/cinemas.input";
+import { locationFilter } from "./input/common.input";
+import { z } from "zod";
 
 export const cinemaRouter = createTRPCRouter({
   cinemas: publicProcedure.query(({ ctx, input }) => {
