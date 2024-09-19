@@ -37,8 +37,8 @@ export const CreateShowtimes = () => {
           if (showtime) {
             reset();
             toast({ title: "Showtime created successfully" });
-            revalidatePath("/admin/showtimes");
-            replace("/admin/showtimes");
+            revalidatePath("/manager/cinemas");
+            replace("/manager/cinemas");
           }
         })}
       >

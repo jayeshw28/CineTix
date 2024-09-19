@@ -1,5 +1,5 @@
 import Metadata from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -8,7 +8,11 @@ import { Container } from "@/components/atoms/container";
 import { Toaster } from "@/components/molecules/Toaster/toaster";
 import { Navbar } from "@/components/organisms/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["300", "400", "500"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "CineTix",
@@ -24,7 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <TRPCReactProvider>
         <html lang="en">
-          <body className={inter.className}>
+          <body className={poppins.className}>
             <Toaster />
             <Navbar />
             <Container>{children}</Container>

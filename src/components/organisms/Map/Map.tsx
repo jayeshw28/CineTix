@@ -18,10 +18,9 @@ export const Map = ({ height = "calc(100vh - 4rem)", ...props }: IMapProps) => {
       mapStyle={"mapbox://styles/mapbox/outdoors-v12"}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       style={{ height }}
-      pitch={22.5}
       scrollZoom={false}
       doubleClickZoom={false}
-      initialViewState={{ latitude: 20, longitude: 78, zoom: 4.5 }}
+      initialViewState={{ latitude: 22, longitude: 78, zoom: 4.2 }}
     >
       <StyleMap />
       {props.children}

@@ -1,4 +1,3 @@
-"use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -152,7 +151,7 @@ export const useHandleSearch = () => {
   };
 
   const deleteAll = () => {
-    router.replace("/cinemas");
+    router.replace("/");
 
     console.log("deleteAll:params", params.toString());
   };
@@ -165,7 +164,10 @@ export const useHandleSearch = () => {
  */
 
 export function useGetCinema({ cinemaId }: { cinemaId: string | null }) {
-  const { data, refetch } = trpcClient.cinemas.cinemas.useQuery();
+  const { data, refetch } = trpcClient.cinemas.cinema.useQuery(
+    { cinemaId: +(cinemaId || "") },
+    { enabled: false },
+  );
 
   useEffect(() => {
     if (cinemaId) {
@@ -178,67 +180,67 @@ export function useGetCinema({ cinemaId }: { cinemaId: string | null }) {
   return { cinema: data };
 }
 
-// type SeatRowcolumn = RouterOutputs['showtimes']['seats']['seats'][0]
+type SeatRowcolumn = RouterOutputs["showtimes"]["seats"]["seats"][0];
 
-// type State = {
-//   selectedSeats: SeatRowcolumn[]
-// }
+type State = {
+  selectedSeats: SeatRowcolumn[];
+};
 
-// type ToggleAction = {
-//   type: 'toggleSeat'
-//   payload: SeatRowcolumn
-// }
-// type ResetAction = {
-//   type: 'reset'
-// }
-// type Action = ToggleAction | ResetAction
+type ToggleAction = {
+  type: "toggleSeat";
+  payload: SeatRowcolumn;
+};
+type ResetAction = {
+  type: "reset";
+};
+type Action = ToggleAction | ResetAction;
 
-// const reducer = (state: State, action: Action): State => {
-//   switch (action.type) {
-//     case 'toggleSeat': {
-//       const existingSelection = state.selectedSeats.find(
-//         (selectedSeat) =>
-//           action.payload?.column === selectedSeat.column &&
-//           action.payload?.row === selectedSeat.row,
-//       )
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case "toggleSeat": {
+      const existingSelection = state.selectedSeats.find(
+        (selectedSeat) =>
+          action.payload?.column === selectedSeat.column &&
+          action.payload?.row === selectedSeat.row,
+      );
 
-//       if (existingSelection) {
-//         return {
-//           ...state,
-//           selectedSeats: state.selectedSeats.filter(
-//             (seat) =>
-//               !(
-//                 seat.column === action.payload.column &&
-//                 seat.row === action.payload.row
-//               ),
-//           ),
-//         }
-//       } else {
-//         return {
-//           ...state,
-//           selectedSeats: [...state.selectedSeats, action.payload],
-//         }
-//       }
-//     }
-//     case 'reset': {
-//       return {
-//         ...state,
-//         selectedSeats: [],
-//       }
-//     }
-//     default:
-//       return state
-//   }
-// }
+      if (existingSelection) {
+        return {
+          ...state,
+          selectedSeats: state.selectedSeats.filter(
+            (seat) =>
+              !(
+                seat.column === action.payload.column &&
+                seat.row === action.payload.row
+              ),
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          selectedSeats: [...state.selectedSeats, action.payload],
+        };
+      }
+    }
+    case "reset": {
+      return {
+        ...state,
+        selectedSeats: [],
+      };
+    }
+    default:
+      return state;
+  }
+};
 
-// export const useSeatSelection = () => {
-//   const [state, dispatch] = useReducer(reducer, { selectedSeats: [] })
+export const useSeatSelection = () => {
+  const [state, dispatch] = useReducer(reducer, { selectedSeats: [] });
 
-//   const toggleSeat = (seat: SeatRowcolumn) => {
-//     dispatch({ type: 'toggleSeat', payload: seat })
-//   }
-//   const resetSeats = () => {
-//     dispatch({ type: 'reset' })
-//   }
-//   return { state, toggleSeat, resetSeats }
-// }
+  const toggleSeat = (seat: SeatRowcolumn) => {
+    dispatch({ type: "toggleSeat", payload: seat });
+  };
+  const resetSeats = () => {
+    dispatch({ type: "reset" });
+  };
+  return { state, toggleSeat, resetSeats };
+};
