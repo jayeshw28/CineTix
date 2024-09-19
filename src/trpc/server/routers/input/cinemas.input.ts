@@ -4,14 +4,17 @@ import { States, City } from "@prisma/client";
 
 const cinemaOrderByWithRelationInputSchema = z.object({
   id: SortOrder,
-  "Address.state": SortOrder,
-  "Address.city": SortOrder,
 });
 
 const cinemaWhereInputSchemaPrimitive = z.object({
   id: intFilter,
-  "Address.state": z.nativeEnum(States),
-  "Address.city": z.nativeEnum(City),
+});
+
+const addressWhere = z.object({
+  ne_lng: z.number(),
+  ne_lat: z.number(),
+  sw_lng: z.number(),
+  sw_lat: z.number(),
 });
 
 export const cinemaWhereInputSchema = z.union([
@@ -34,11 +37,7 @@ export const findManyCinemaArgsSchema = z.object({
   cursor: cinemaWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.array(z.enum(["id", "Address.state", "Address.city"])).optional(),
+  distinct: z.array(z.enum(["id"])).optional(),
 });
 
-export const cinemaScalarFieldEnumSchema = z.enum([
-  "id",
-  "Address.state",
-  "Address.city",
-]);
+export const cinemaScalarFieldEnumSchema = z.enum(["id"]);
