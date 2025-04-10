@@ -1,17 +1,20 @@
-import * as admin from 'firebase-admin'
+import * as admin from "firebase-admin";
 
-const firebasePrivateKey = process.env.firebasePrivateKey?.replace(/\\n/g, '\n')
+const firebasePrivateKey = process.env.firebasePrivateKey?.replace(
+  /\\n/g,
+  "\n",
+);
 console.log(firebasePrivateKey);
 
-console.log('admin.apps.length', admin.apps.length)
+console.log("admin.apps.length", admin.apps.length);
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
       clientEmail: process.env.firebaseClientEmail,
       privateKey: firebasePrivateKey,
-      projectId: process.env.firebaseProjectId
+      projectId: process.env.firebaseProjectId,
     }),
-    storageBucket: process.env.NEXT_PUBLIC_storageBucket
-  })
+    storageBucket: process.env.NEXT_PUBLIC_storageBucket,
+  });
 }
-export const adminStorage = admin.storage()
+export const adminStorage = admin.storage();
