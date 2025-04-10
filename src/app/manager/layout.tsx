@@ -31,7 +31,9 @@ export default async function Layout({
             <ManagerMenu />
           </SimpleSidebar>
         </div>
-        <div className="p-4 bg-gray-100">{children}</div>
+        <div className="p-4 bg-gray-100 rounded-lg border-4 border-[#B9C3AF]">
+          {children}
+        </div>
       </div>
     </div>
   );

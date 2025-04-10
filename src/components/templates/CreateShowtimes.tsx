@@ -34,11 +34,17 @@ export const CreateShowtimes = () => {
           console.log("Form submission data:", data);
           const showtime = await createShowtime(data);
 
-          if (showtime) {
-            reset();
-            toast({ title: "Showtime created successfully" });
-            revalidatePath("/manager/cinemas");
-            replace("/manager/cinemas");
+          try{
+            if (showtime) {
+              reset();
+              toast({ title: "Showtime created successfully" });
+              revalidatePath("/manager/cinemas");
+              replace("/manager/cinemas");
+            }
+          }
+          catch{
+            console.error("Error creating showtime:", error);
+            toast({ title: "Error creating showtime", variant: "destructive" });
           }
         })}
       >

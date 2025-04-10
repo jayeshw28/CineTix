@@ -6,7 +6,7 @@ import { SetCity } from "../organisms/SearchUtils/SetCity";
 
 export const SearchCinemas = () => {
   return (
-    <div className="rounded-sm">
+    <div className="mt-10 p-2">
       <Map>
         <Panel position="right-center">
           <DefaultZoomControls />

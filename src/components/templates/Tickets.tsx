@@ -12,6 +12,7 @@ import { trpcClient } from "@/trpc/clients/client";
 import { Loading } from "../molecules/Loading";
 import { RouterOutputs } from "@/trpc/clients/types";
 import { SimpleDialog } from "../molecules/SimpleDialog";
+import { SeatNumber } from "../organisms/SearchUtils/SeatNumber";
 
 export interface ITicketsProps {}
 
@@ -20,9 +21,7 @@ async function getImageUrl(path: string): Promise<string> {
     throw new Error("Invalid file path");
   }
 
-  // Remove any leading slash if present
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-
   try {
     const fileRef = ref(storage, cleanPath);
     const url = await getDownloadURL(fileRef);
@@ -41,11 +40,11 @@ export const TicketMovie = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <div key={ticket.id}>
+    <div key={ticket.id} className="bg-white">
       <SimpleDialog open={open} setOpen={setOpen} title={"QR Code"}>
         <QRCode url={ticket.qrCode || ""} />
       </SimpleDialog>
-      <div className="flex gap-6">
+      <div className="flex gap-6 rounded-sm p-3 border">
         <Image
           width={200}
           height={200}
@@ -62,7 +61,7 @@ export const TicketMovie = ({
               <div>{ticket.Booking[0].ShowTime.Screen.Cinema.name}</div>
             </div>
             <div className="flex flex-col items-center p-1 border rounded">
-              <div className="text-xs">Screen</div>
+              <div className="text-xs">AUDI</div>
               <div className="text-xl font-bold">
                 {ticket.Booking[0].ShowTime.Screen.number}
               </div>
@@ -80,12 +79,11 @@ export const TicketMovie = ({
             <div>Seats</div>
             <div className="flex flex-wrap gap-2 ">
               {ticket.Booking.map((booking) => (
-                <div
+                <SeatNumber
                   key={booking.id}
-                  className="px-1 text-sm bg-white border rounded "
-                >
-                  {booking.row}-{booking.column}
-                </div>
+                  row={booking.row}
+                  column={booking.column}
+                />
               ))}
             </div>
           </div>
@@ -106,7 +104,7 @@ export const TicketMovie = ({
 export const Tickets = ({}: ITicketsProps) => {
   const { userId } = useAuth();
   const [skip, setSkip] = useState(0);
-  const [take, setTake] = useState(6);
+  const [take, setTake] = useState(0);
   const { data, isLoading } = trpcClient.tickets.myTickets.useQuery();
 
   const [open, setOpen] = useState(false);
@@ -126,7 +124,7 @@ export const QRCode = ({ url }: { url: string }) => {
   const [picUrl, setPicUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  // fix this
   useEffect(() => {
     async function fetchImageUrl() {
       if (!url) {

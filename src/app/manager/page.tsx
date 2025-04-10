@@ -6,7 +6,7 @@ export default async function Page() {
   const dashboard = await trpcServer.managers.dashboard.query();
   const managerMe = await trpcServer.managers.managerMe.query();
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h1 className=" mb-4">Manager Page</h1>
 
       <div className="grid grid-cols-1 mt-2 mb-4 sm:grid-cols-1 md:grid-cols-1 gap-3">
