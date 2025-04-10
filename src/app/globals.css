@@ -183,5 +183,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: url("/cinetix-bg.svg");
+    background-repeat: repeat;
+    background-size: 25%;
+    background-position: center;
   }
 }
